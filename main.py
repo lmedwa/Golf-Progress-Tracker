@@ -8,11 +8,35 @@ def streamlit_input():
     with tab1:
         st.title("Golf Tracker App")
         st.header("Track your golf scores and performance over time")
-        score = st.number_input("Enter round score:", min_value=0)
+        course_rating = st.number_input("Enter course rating:", min_value=0)
+        slope_rating = st.number_input("Enter slope rating:", min_value=0)
         date = st.date_input("Date:")
+        nine_or_eighteen = st.selectbox(
+            " Are you playing 9 or eighteen holes",
+            ("9", "18")
+        )
+        scores = []
+        if nine_or_eighteen == "9":
+            cols = st.columns(9)
+            for i, col in enumerate(cols):
+                with col:
+                    hole = st.number_input(f"Hole {i+1}:", min_value=0)
+                    scores.append(hole)
+
+        elif nine_or_eighteen == "18":
+            cols = st.columns(18)
+            for i, col in enumerate(cols):
+                with col:
+                    hole = st.number_input(f"Hole {i+1}:", min_value=0)
+                    scores.append(hole)
+
+        total_score = sum(scores)
+        st.write(f"Total Score: {total_score}")
+
         if st.button("Submit"):
-            insert_round(score, date)
+            insert_round(total_score, date, course_rating, slope_rating)
             st.success("Round score submitted successfully!")
+
     with tab2:
         st.title("Range Session Input")
         st.header("Track your average driving distances")
